@@ -1,15 +1,15 @@
 {
   "manifest_version": 2,
-  "name": "Multipreffer",
+  "name": "Cookie Restrictions Strict List Study",
   "version": "1.0",
-  "description": "Flippa lotta prefs",
+  "description": "A study that blocks tracking cookies from the strict list and the basic list, in two separate cohorts.",
   "background": {
     "scripts": ["background.js"]
   },
   "applications": {
     "gecko": {
-      "id": "multipreffer@shield.mozilla.org",
-      "strict_min_version": "64.0"
+      "id": "cookie-restrictions-strict-list-study@shield.mozilla.org",
+      "strict_min_version": "65.0"
     }
   },
 
