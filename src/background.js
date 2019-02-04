@@ -7,14 +7,14 @@ async function getStudySetup() {
     studyType: "shield",
 
     telemetry: {
-      send: false,
-      removeTestingFlag: false,
+      send: true,
+      removeTestingFlag: true,
     },
 
     endings: { },
 
     expire: {
-      days: 14,
+      days: 56, // 8 weeks
     },
   };
 
@@ -35,9 +35,6 @@ async function init() {
   });
 
   browser.study.onEndStudy.addListener(async (ending) => {
-    for (const url of ending.urls) {
-      await browser.tabs.create({ url });
-    }
     browser.management.uninstallSelf();
   });
 
