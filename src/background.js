@@ -14,7 +14,7 @@ async function getStudySetup() {
     endings: { },
 
     expire: {
-      days: 56, // 8 weeks
+      days: 365,
     },
   };
 
