@@ -3,6 +3,7 @@
   "name": "Cookie Restrictions Strict List Study",
   "version": "1.0",
   "description": "A study that blocks tracking cookies from the strict list and the basic list, in two separate cohorts.",
+  "hidden": true,
   "background": {
     "scripts": ["background.js"]
   },
