@@ -56,6 +56,7 @@ this.FirefoxHooks = {
       Preferences.get("extensions.multipreffer.test.variationName",
                       this.studyInfo.variation.name);
     const prefs = this.variations[variationName].prefs;
+    const nonDefaultPrefs = this.variations[variationName].prefs.nonDefault;
     if (this.studyInfo.isFirstRun) {
       for (const name of Object.keys(prefs.setValues)) {
         if (Preferences.isSet(name)) {
@@ -65,6 +66,17 @@ this.FirefoxHooks = {
           return;
         }
       }
+      for (const ndPref of nonDefaultPrefs) {
+        if (Preferences.get(ndPref.pref) !== ndPref.reset_to) {
+          // One of the prefs has an incorrect user-set value, ABORT!!!
+          // TODO: End the study/uninstall the addon?
+          Preferences.set(this.abortedPref, true);
+          return;
+        }
+      }
+    }
+    for (const ndPref of nonDefaultPrefs) {
+      Preferences.set(ndPref.pref, ndPref.value);
     }
     Preferences.set(prefs.setValues);
   },
