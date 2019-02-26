@@ -85,16 +85,8 @@ describe("setup and teardown", function() {
       const prefs = variations[variation].prefs;
       const allPrefs = Object.keys(prefs.setValues);
 
-      const testPref = allPrefs[0];
-      const val = prefs.setValues[testPref];
-      let testVal;
-      if (typeof val === "number") {
-        testVal = 999;
-      } else if (typeof val === "string") {
-        testVal = "Test Value!";
-      } else if (typeof val === "boolean") {
-        testVal = true;
-      }
+      const testPref = "network.cookie.cookieBehavior";
+      const testVal = 3;
 
       describe(`sets the correct prefs for variation ${variation}`, () => {
         before(async () => {
@@ -108,7 +100,7 @@ describe("setup and teardown", function() {
         });
 
         it("has the correct prefs after uninstall", async () => {
-          await utils.setPreference(driver, allPrefs[0], testVal);
+          await utils.setPreference(driver, testPref, testVal);
           await utils.setupWebdriver.uninstallAddon(driver, addonId);
           const prefsToCheck = Object.assign({}, prefs.setValues);
           for (const pref of prefs.resetDefaults) {
@@ -118,7 +110,7 @@ describe("setup and teardown", function() {
             prefsToCheck[pref] = prefs.resetValues[pref];
           }
           prefsToCheck[testPref] = testVal;
-          prefsToCheck["browser.contentblocking.category"] = "standard";
+          prefsToCheck["browser.contentblocking.category"] = "custom";
           await checkPrefs(driver, allPrefs, prefsToCheck);
           for (const pref in prefsToCheck) {
             await utils.clearPreference(driver, pref);
