@@ -63,6 +63,7 @@ describe("setup and teardown", function() {
           for (const pref in prefs.resetValues) {
             prefsToCheck[pref] = prefs.resetValues[pref];
           }
+          prefsToCheck["browser.contentblocking.category"] = "standard";
           await checkPrefs(driver, allPrefs, prefsToCheck);
           for (const pref in prefsToCheck) {
             await utils.clearPreference(driver, pref);
@@ -85,7 +86,7 @@ describe("setup and teardown", function() {
       const allPrefs = Object.keys(prefs.setValues);
 
       const testPref = allPrefs[0];
-      let val = prefs.setValues[testPref];
+      const val = prefs.setValues[testPref];
       let testVal;
       if (typeof val === "number") {
         testVal = 999;
@@ -117,6 +118,7 @@ describe("setup and teardown", function() {
             prefsToCheck[pref] = prefs.resetValues[pref];
           }
           prefsToCheck[testPref] = testVal;
+          prefsToCheck["browser.contentblocking.category"] = "standard";
           await checkPrefs(driver, allPrefs, prefsToCheck);
           for (const pref in prefsToCheck) {
             await utils.clearPreference(driver, pref);
@@ -189,16 +191,8 @@ describe("setup and teardown", function() {
       }
       const allPrefs = Object.keys(prefs.setValues);
 
-      const testPref = prefs.expectNonDefaults[0];
-      const val = prefs.setValues[testPref];
-      let testVal;
-      if (typeof val === "number") {
-        testVal = 999;
-      } else if (typeof val === "string") {
-        testVal = "Test Value!";
-      } else if (typeof val === "boolean") {
-        testVal = true;
-      }
+      const testPref = "browser.contentblocking.category";
+      const testVal = "standard";
 
       describe(`sets the correct prefs for ${variation}`, () => {
         before(async () => {
@@ -221,6 +215,7 @@ describe("setup and teardown", function() {
           for (const pref in prefs.resetValues) {
             prefsToCheck[pref] = prefs.resetValues[pref];
           }
+          prefsToCheck["browser.contentblocking.category"] = "standard";
           await checkPrefs(driver, allPrefs, prefsToCheck);
           for (const pref in prefsToCheck) {
             await utils.clearPreference(driver, pref);
