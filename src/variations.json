@@ -4,11 +4,14 @@
     "prefs": {
       "setValues": {
         "urlclassifier.trackingAnnotationTable": "test-track-simple,base-track-digest256",
-        "network.cookie.cookieBehavior": 0
+        "network.cookie.cookieBehavior": 0,
+        "browser.contentblocking.category": "custom"
       },
+      "expectNonDefaults": ["browser.contentblocking.category"],
       "resetDefaults": [
         "network.cookie.cookieBehavior",
-        "urlclassifier.trackingAnnotationTable"
+        "urlclassifier.trackingAnnotationTable",
+        "browser.contentblocking.category"
       ],
       "resetValues": {
       }
@@ -20,11 +23,14 @@
     "prefs": {
       "setValues": {
         "urlclassifier.trackingAnnotationTable": "test-track-simple,base-track-digest256,content-track-digest256",
-        "network.cookie.cookieBehavior": 4
+        "network.cookie.cookieBehavior": 4,
+        "browser.contentblocking.category": "custom"
       },
+      "expectNonDefaults": ["browser.contentblocking.category"],
       "resetDefaults": [
         "network.cookie.cookieBehavior",
-        "urlclassifier.trackingAnnotationTable"
+        "urlclassifier.trackingAnnotationTable",
+        "browser.contentblocking.category"
       ],
       "resetValues": {
       }

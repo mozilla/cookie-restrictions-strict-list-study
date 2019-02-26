@@ -58,7 +58,7 @@ this.FirefoxHooks = {
     const prefs = this.variations[variationName].prefs;
     if (this.studyInfo.isFirstRun) {
       for (const name of Object.keys(prefs.setValues)) {
-        if (Preferences.isSet(name)) {
+        if (!prefs.expectNonDefaults.includes(name) && Preferences.isSet(name)) {
           // One of the prefs has a user-set value, ABORT!!!
           // TODO: End the study/uninstall the addon?
           Preferences.set(this.abortedPref, true);
@@ -100,6 +100,20 @@ this.FirefoxHooks = {
         }
       }
       Preferences.set(resetValues);
+
+      // At this point, the category pref has been wiped; let's recompute it.
+      // BrowserGlue will recompute the category pref when the cookie behavior
+      // pref changes value, but only if the category pref is unset. So, we
+      // need to change the cookie behavior pref, which will recompute the
+      // category pref. Then, clear the newly recomputed category pref, and
+      // finally restore the cookie behavior pref again which will recompute
+      // the category pref in the correct state.
+      const cookieBehaviorValue =
+        Preferences.get("network.cookie.cookieBehavior");
+      const tempCookieBehaviorValue = cookieBehaviorValue === 4 ? 0 : 4;
+      Preferences.set("network.cookie.cookieBehavior", tempCookieBehaviorValue);
+      Preferences.reset("browser.contentblocking.category");
+      Preferences.set("network.cookie.cookieBehavior", cookieBehaviorValue);
     } catch (e) {
       Cu.reportError(e);
     }

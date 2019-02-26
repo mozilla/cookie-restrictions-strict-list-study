@@ -63,6 +63,7 @@ describe("setup and teardown", function() {
           for (const pref in prefs.resetValues) {
             prefsToCheck[pref] = prefs.resetValues[pref];
           }
+          prefsToCheck["browser.contentblocking.category"] = "standard";
           await checkPrefs(driver, allPrefs, prefsToCheck);
           for (const pref in prefsToCheck) {
             await utils.clearPreference(driver, pref);
@@ -83,6 +84,10 @@ describe("setup and teardown", function() {
     for (const variation in variations) {
       const prefs = variations[variation].prefs;
       const allPrefs = Object.keys(prefs.setValues);
+
+      const testPref = "network.cookie.cookieBehavior";
+      const testVal = 3;
+
       describe(`sets the correct prefs for variation ${variation}`, () => {
         before(async () => {
           await utils.setPreference(driver, "extensions.multipreffer.test.variationName", variation);
@@ -95,7 +100,7 @@ describe("setup and teardown", function() {
         });
 
         it("has the correct prefs after uninstall", async () => {
-          await utils.setPreference(driver, allPrefs[0], "TEST VALUE!!");
+          await utils.setPreference(driver, testPref, testVal);
           await utils.setupWebdriver.uninstallAddon(driver, addonId);
           const prefsToCheck = Object.assign({}, prefs.setValues);
           for (const pref of prefs.resetDefaults) {
@@ -104,7 +109,8 @@ describe("setup and teardown", function() {
           for (const pref in prefs.resetValues) {
             prefsToCheck[pref] = prefs.resetValues[pref];
           }
-          prefsToCheck[allPrefs[0]] = "TEST VALUE!!";
+          prefsToCheck[testPref] = testVal;
+          prefsToCheck["browser.contentblocking.category"] = "custom";
           await checkPrefs(driver, allPrefs, prefsToCheck);
           for (const pref in prefsToCheck) {
             await utils.clearPreference(driver, pref);
@@ -118,7 +124,7 @@ describe("setup and teardown", function() {
     }
   });
 
-  describe("Set some user prefs, ensure addon doesn't do anything", function() {
+  describe("Set up some prefs with unexpected values, ensure addon doesn't do anything", function() {
     const SETUP_DELAY = 500;
     let addonId;
     let abortedPref;
@@ -126,10 +132,14 @@ describe("setup and teardown", function() {
     for (const variation in variations) {
       const prefs = variations[variation].prefs;
       const allPrefs = Object.keys(prefs.setValues);
+
+      const testPref = allPrefs[0];
+      const testVal = "Test Value!";
+
       describe(`no prefs should be set for ${variation}`, () => {
         before(async () => {
           await utils.setPreference(driver, "extensions.multipreffer.test.variationName", variation);
-          await utils.setPreference(driver, allPrefs[0], "TEST VALUE!!");
+          await utils.setPreference(driver, testPref, testVal);
           addonId = await utils.setupWebdriver.installAddon(driver);
           abortedPref = `extensions.multipreffer.${addonId}.aborted`;
           await driver.sleep(SETUP_DELAY);
@@ -139,7 +149,7 @@ describe("setup and teardown", function() {
           // Take the first of the target prefs and set it to some value
           // before installing the addon.
           const prefsToCheck = {};
-          prefsToCheck[allPrefs[0]] = "TEST VALUE!!";
+          prefsToCheck[testPref] = testVal;
           // The addon should set this pref to indicate that it aborted.
           allPrefs.push(abortedPref);
           prefsToCheck[abortedPref] = true;
@@ -148,10 +158,60 @@ describe("setup and teardown", function() {
 
         it("has the correct prefs after uninstall", async () => {
           const prefsToCheck = {};
-          prefsToCheck[allPrefs[0]] = "TEST VALUE!!";
+          prefsToCheck[testPref] = testVal;
           allPrefs.push(abortedPref);
           await utils.setupWebdriver.uninstallAddon(driver, addonId);
           await checkPrefs(driver, allPrefs, prefsToCheck);
+        });
+
+        after(async () => {
+          await utils.clearPreference(driver, testPref);
+          await utils.clearPreference(driver, "extensions.multipreffer.test.variationName");
+        });
+      });
+    }
+  });
+
+  describe("Ensure expectNonDefaults works", function() {
+    const SETUP_DELAY = 500;
+    let addonId;
+
+    for (const variation in variations) {
+      const prefs = variations[variation].prefs;
+      if (!prefs.expectNonDefaults.length) {
+        continue;
+      }
+      const allPrefs = Object.keys(prefs.setValues);
+
+      const testPref = "browser.contentblocking.category";
+      const testVal = "standard";
+
+      describe(`sets the correct prefs for ${variation}`, () => {
+        before(async () => {
+          await utils.setPreference(driver, "extensions.multipreffer.test.variationName", variation);
+          await utils.setPreference(driver, testPref, testVal);
+          addonId = await utils.setupWebdriver.installAddon(driver);
+          await driver.sleep(SETUP_DELAY);
+        });
+
+        it("has the correct prefs after install", async () => {
+          await checkPrefs(driver, allPrefs, prefs.setValues);
+        });
+
+        it("has the correct prefs after uninstall", async () => {
+          await utils.setupWebdriver.uninstallAddon(driver, addonId);
+          const prefsToCheck = Object.assign({}, prefs.setValues);
+          for (const pref of prefs.resetDefaults) {
+            prefsToCheck[pref] = undefined;
+          }
+          for (const pref in prefs.resetValues) {
+            prefsToCheck[pref] = prefs.resetValues[pref];
+          }
+          prefsToCheck["browser.contentblocking.category"] = "standard";
+          await checkPrefs(driver, allPrefs, prefsToCheck);
+          for (const pref in prefsToCheck) {
+            await utils.clearPreference(driver, pref);
+          }
         });
 
         after(async () => {
