@@ -10,6 +10,8 @@ ChromeUtils.defineModuleGetter(this, "AddonManager",
   "resource://gre/modules/AddonManager.jsm");
 ChromeUtils.defineModuleGetter(this, "Preferences",
   "resource://gre/modules/Preferences.jsm");
+ChromeUtils.defineModuleGetter(this, "AddonStudies",
+  "resource://normandy/lib/AddonStudies.jsm");
 
 let gExtension;
 
@@ -30,6 +32,9 @@ this.multipreffer = class extends ExtensionAPI {
 
 this.FirefoxHooks = {
   init() {
+    AddonStudies.addUnenrollListener(gExtension.id, async (reason) => {
+      await this.cleanup();
+    });
     AddonManager.addAddonListener(this);
   },
 
