@@ -75,6 +75,10 @@ this.FirefoxHooks = {
   },
 
   async cleanup() {
+    // Only run once. cleanup may get called from multiple listeners on expiry.
+    if (this._cleanedUp) {
+      return;
+    }
     // Called when the add-on is being removed for any reason.
     if (Preferences.get(this.abortedPref)) {
       Preferences.reset(this.abortedPref);
@@ -119,6 +123,7 @@ this.FirefoxHooks = {
       Preferences.set("network.cookie.cookieBehavior", tempCookieBehaviorValue);
       Preferences.reset("browser.contentblocking.category");
       Preferences.set("network.cookie.cookieBehavior", cookieBehaviorValue);
+      this._cleanedUp = true;
     } catch (e) {
       Cu.reportError(e);
     }
