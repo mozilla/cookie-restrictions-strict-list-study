@@ -1,7 +1,7 @@
 {
   "name": "cookie-restrictions-strict-list-study",
   "description": "A study that blocks tracking cookies from the strict list and the basic list, in two separate cohorts.",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "author": "Mozilla",
   "bugs": {
     "url": ""
