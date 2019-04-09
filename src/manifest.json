@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Cookie Restrictions Strict List Study",
-  "version": "1.4",
+  "version": "2.0",
   "description": "A study that blocks tracking cookies from the strict list and the basic list, in two separate cohorts.",
   "hidden": true,
   "background": {
@@ -10,7 +10,7 @@
   "applications": {
     "gecko": {
       "id": "cookie-restrictions-strict-list-study@shield.mozilla.org",
-      "strict_min_version": "65.0"
+      "strict_min_version": "66.0"
     }
   },
 
