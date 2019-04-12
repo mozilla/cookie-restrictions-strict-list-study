@@ -1,5 +1,5 @@
 {
-  "Control": {
+  "control": {
     "weight": 1,
     "prefs": {
       "urlclassifier.trackingAnnotationTable": "test-track-simple,base-track-digest256",
@@ -7,7 +7,7 @@
     }
   },
 
-  "Experiment": {
+  "treatment": {
     "weight": 1,
     "prefs": {
       "urlclassifier.trackingAnnotationTable": "test-track-simple,base-track-digest256,content-track-digest256",
