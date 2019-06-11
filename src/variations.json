@@ -2,15 +2,13 @@
   "control": {
     "weight": 1,
     "prefs": {
-      "urlclassifier.trackingAnnotationTable": "test-track-simple,base-track-digest256",
-      "network.cookie.cookieBehavior": 0
     }
   },
 
   "test": {
     "weight": 1,
     "prefs": {
-      "urlclassifier.trackingAnnotationTable": "test-track-simple,base-track-digest256,content-track-digest256",
+      "urlclassifier.trackingAnnotationTable": "test-track-simple,ads-track-digest256,social-track-digest256,analytics-track-digest256,content-track-digest256",
       "network.cookie.cookieBehavior": 4
     }
   }
