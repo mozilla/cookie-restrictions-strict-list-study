@@ -20,7 +20,7 @@
     "mocha": "^5.2.0",
     "npm-run-all": "^4.1.1",
     "selenium-webdriver": "^3.5.0",
-    "web-ext": "^2.7.0"
+    "web-ext": "^7.2.0"
   },
   "engines": {
     "node": ">=8.11.1"
